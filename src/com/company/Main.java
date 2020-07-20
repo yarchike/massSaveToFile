@@ -1,49 +1,50 @@
 package com.company;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
-        String[] mass = new String[]{"Молока", "Коффе", "Картошка"};
-        Integer[] mass2 = new Integer[]{25, 27, 30};
-        String[] newMass = new String[mass.length];
-        Integer[] newMass2 = new Integer[mass2.length];
+        ArrayList<String> mass = new ArrayList<>();
+        ArrayList<Integer> mass2 = new ArrayList<>();
+
+        read(mass, mass2);
         write(mass, mass2);
-        read(newMass, newMass2);
-        System.out.println(Arrays.toString(newMass));
-        System.out.println(Arrays.toString(newMass2));
+        //System.out.println(Arrays.toString(newMass));
+        // System.out.println(Arrays.toString(newMass2));
 
     }
 
-    private static void read(String[] newMass, Integer[] newMass2) {
-        try (BufferedReader reader = new BufferedReader(new FileReader("C:\\resurs\\utf.csv"))) {
+    private static void read(ArrayList<String> mass, ArrayList<Integer> mass2) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream("C:\\resurs\\utf.csv"), "cp1251"))) {
             Scanner scan = new Scanner(reader);
             scan.nextLine();
             int i = 0;
             while (scan.hasNextLine()) {
                 String scanner = scan.nextLine();
                 String[] temStringArray = scanner.split(";");
-                newMass[i] = temStringArray[0];
-                newMass2[i] = Integer.parseInt(temStringArray[1]);
+                mass.add(i, temStringArray[0]);
+                mass2.add(i, Integer.parseInt(temStringArray[1]));
                 i++;
             }
 
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
+        System.out.println("Успешно прочитано");
     }
 
-    private static void write(String[] mass, Integer[] mass2) {
-        try (BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("C:\\resurs\\utf.csv"), "cp1251"));) {
+    private static void write(ArrayList<String> mass, ArrayList<Integer> mass2 ) {
+        try (BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("C:\\resurs\\utf2.csv"), "cp1251"));) {
             out.write("Наименование;цена\n");
-            for (int i = 0; i < mass.length; i++) {
+            for (int i = 0; i < mass.size(); i++) {
 
-                out.write(mass[i]);
+                out.write(mass.get(i));
                 out.write(";");
-                out.write(mass2[i].toString());
+                out.write(mass2.get(i).toString());
                 out.write('\n');
             }
             out.flush();
@@ -51,5 +52,7 @@ public class Main {
 
             System.out.println(ex.getMessage());
         }
+        System.out.println("Успешно записанно");
     }
+
 }
